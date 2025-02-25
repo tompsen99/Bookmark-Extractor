@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML 网址提取工具</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      textarea {
+        width: 100%;
+        height: 200px;
+        padding: 10px;
+        margin: 20px 0;
+        font-size: 16px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #0056b3;
+      }
+
+      .result {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .result h2 {
+        margin-top: 0;
+        color: #28a745;
+      }
+
+      .result ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .result li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .result a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .result a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HTML 网址提取工具</h1>
+    <textarea id="htmlInput" placeholder="将HTML内容粘贴到这里……"></textarea>
+    <button class="button" onclick="extractUrls()">提取网址</button>
+    <div class="result" id="result"></div>
+
+    <script>
+      function extractUrls() {
+        const htmlContent = document.getElementById("htmlInput").value;
+        const resultDiv = document.getElementById("result");
+
+        // 创建一个临时的 DOM 容器来解析 HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, "text/html");
+
+        // 获取所有的 <a> 标签
+        const links = doc.querySelectorAll("a[href]");
+
+        // 清空之前的提取结果
+        resultDiv.innerHTML = "";
+
+        if (links.length === 0) {
+          // 如果没有找到网址
+          resultDiv.innerHTML = "<p>抱歉，没有找到任何网址！</p>";
+          return;
+        }
+
+        // 显示提取结果
+        resultDiv.innerHTML = `
+          <h2>提取到的网址：</h2>
+          <ul>
+            ${Array.from(links)
+              .map(
+                (link) =>
+                  `<li><a href="${link.href}" target="_blank">${link.href}</a></li>`
+              )
+              .join("")}
+          </ul>
+        `;
+      }
+    </script>
+  </body>
+</html>
